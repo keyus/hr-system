@@ -136,12 +136,10 @@
                                                 </td>
                                                 <td>
                                                     <template v-if="it.state !== 1">
-                                                        <span
-                                                            class="el-tag el-tag--success">{{it.state | memberState}}</span>
+                                                        <el-tag>{{it.state | memberState}}</el-tag>
                                                     </template>
                                                     <template v-else>
-                                                        <span
-                                                            class="el-tag el-tag--danger">{{it.state | memberState}}</span>
+                                                        <el-tag type="danger">{{it.state | memberState}}</el-tag>
                                                     </template>
                                                 </td>
                                                 <!--{{it.state | memberState}}-->

@@ -11,6 +11,7 @@
                     <span class="login-auth-input__icon"><i class="el-icon-location-outline"></i></span>
                     <input type="text"
                            @keyup="keyup"
+                           name="UserName"
                            v-model="user"
                            autocomplete="off"
                            placeholder="请输入用户名" />
@@ -19,6 +20,7 @@
                     <span class="login-auth-input__icon"><i class="el-icon-edit"></i></span>
                     <input type="password"
                            @keyup="keyup"
+                           name="PasswordInput"
                            v-model="password"
                            autocomplete="off"
                            placeholder="请输入登录密码" />
@@ -118,7 +120,7 @@
                     return true;
                 }
                 return false;
-            }
+            },
         }
     }
 </script>
