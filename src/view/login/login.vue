@@ -51,7 +51,7 @@
         name: "login",
         data() {
             return {
-                user: '',
+                user: cookie.getItem('hrUser'),
                 password: '',
                 error: false,
                 error_msg : '用户名或密码错误',
@@ -87,9 +87,14 @@
                     let res = await this.$api.login({
                         username: this.user,
                         pwd: this.password,
-                    })
+                    });
 
                     if (res.data.code === 200) {
+                        if(this.checked){
+                            cookie.setItem('hrUser', res.data.data.account, '', '/');
+                        }else{
+                            cookie.removeItem('hrUser');
+                        }
                         cookie.setItem('user', JSON.stringify(res.data.data), '20000', '/');
                         this.$store.commit('updateUser', res.data.data);
                         this.jump();

@@ -79,10 +79,15 @@
                             </div>
                         </form>
                     </div>
-                    <div class="tableListOperator____5-oc">
+                    <div class="tableListOperator____5-oc ant-row-flex ant-row-flex-middle">
+                        <div class="flex-auto">
                         <el-button type="primary" icon="el-icon-plus" size="small"  @click="openCreate">新增成员</el-button>
-                        <el-button type="primary" icon="el-icon-upload2" size="small">批量导入成员</el-button>
-                        <el-button type="primary" icon="el-icon-download" size="small">导出</el-button>
+                        <el-button type="primary" icon="el-icon-upload2" size="small" @click="openImport">批量导入成员</el-button>
+                        <el-button type="primary" icon="el-icon-download" size="small" @click="downloadMember">导出</el-button>
+                        </div>
+                        <div>
+                            <a href="javascript:;" @click="downloadTemplate">下载批量导入模板</a>
+                        </div>
                     </div>
                 </div>
 
@@ -181,10 +186,12 @@
         </div>
 
         <!--添加成员-->
-        <add-member :visible.sync="addDialogVisible" :depart-list="departList" @init="init()"></add-member>
+        <add-member :visible.sync="addDialogVisible" :depart-list="departList" @init="init()" />
         <!--修改成员-->
         <update-member :visible.sync="updateDialogVisible" :item="currentUpdate" :depart-list="departList"
-                       @init="init(pageNumber)"></update-member>
+                       @init="init(pageNumber)" />
+        <!--批量导入-->
+        <importMember :visible.sync="importDialogVisible" />
 
         <!--转移成员-->
         <el-dialog
@@ -224,18 +231,22 @@
 
     import addMember from './addMember'
     import updateMember from './updateMember'
+    import importMember from './importMember'
+    import instance from "../../router";
 
     export default {
         mixins: [loadingPage],
         components: {
             addMember,
             updateMember,
+            importMember,
         },
         data() {
             return {
                 addDialogVisible: false,
                 updateDialogVisible: false,
                 moveDialogVisible: false,
+                importDialogVisible: false,
                 loadingPageNext: false,
                 fileList2: [],
 
@@ -436,6 +447,9 @@
             openCreate() {
                 this.addDialogVisible = true;
             },
+            openImport(){
+                this.importDialogVisible = true;
+            },
             openUpdate(item) {
                 this.currentUpdate = item;
                 this.updateDialogVisible = true;
@@ -444,6 +458,18 @@
                 this.currentUpdate = item;
                 this.moveDialogVisible = true;
             },
+            downloadTemplate(){
+                this.$api.downloadTemplate();
+            },
+            downloadMember(){
+                let projectId = this.querystring.projectId && this.querystring.projectName ? this.querystring.projectId : this.projectId;
+                const data = {
+                    keywords: this.keywords,
+                    departmentId: this.departmentId,
+                    projectId: projectId,
+                };
+                this.$api.downloadMember(data);
+            }
         },
         filters: {
             memberState(val) {

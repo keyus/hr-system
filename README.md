@@ -14,3 +14,5 @@ npm run serve
 ```
 npm run build
 ```
+
+if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

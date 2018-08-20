@@ -187,6 +187,40 @@ export const deleteProject = (guid) => {
     return axios.post('/project/delete', {guid});
 }
 
+//下载批量导出成员文件
+export const downloadMember = async (data) => {
+    const blob = await axios({
+        method:'post',
+        url:'/employee/batchExport',
+        responseType: 'blob',
+        data,
+    });
+    const url  = window.URL.createObjectURL(blob.data);
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = `成员列表${new Date().getTime()}.xlsx`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    return axios.post('/employee/batchExport',data);
+}
+
+//下载批量导入模板文件
+export const downloadTemplate = async () => {
+    const data = await axios({
+        method:'post',
+        url:'/employee/example',
+        responseType: 'blob'
+    })
+    const url  = window.URL.createObjectURL(data.data);
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = `成员模板.xlsx`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+};
+
 //获取图片
 export const getfile = (fileName) => {
     return axios.get('/employee/getfile', {params: {fileName}});
@@ -202,3 +236,6 @@ export const uploadFileUrl = '/api/employee/uploadFile';
 
 //获取图片地址
 export const getFileUrl = '/api/employee/getfile?fileName=';
+
+//批量导入
+export const importFileUrl = '/api/employee/batchImport';
